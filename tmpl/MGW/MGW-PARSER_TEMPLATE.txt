@@ -1,0 +1,189 @@
+渠道ID[CHANNEL_SYSTEM_ID]|&|[EXCHANGE_TYPE_ID]|&|Groovy模板内容[GROOVY_CONTENT]|&|备注[MEMO]|&|Groovy文件名称[GROOVY_CLASS_NAME]|&|当前交易顺序标识(默认'0')[CUR_TRANS_SEQ]|&|后续交易顺序标识(默认'')[NEXT_TRANS_SEQ]
+SPDBSH0602|&|06|&|import org.dom4j.Element
+import java.util.Map
+import java.util.HashMap
+import com.pinganfu.messagegw.biz.message.model.parser.SignatureInfo
+import com.pinganfu.messagegw.biz.message.parser.TextMessageParser
+import com.pinganfu.messagegw.biz.message.util.XmlHelper
+import com.pinganfu.messagegw.common.util.lang.DateUtil
+import com.pinganfu.messagegw.common.util.log.ExceptionUtil
+import com.pinganfu.common.lang.enums.OrderStatus
+import com.pinganfu.messagegw.core.shared.enums.TransactionResultEnum
+import com.pinganfu.messagegw.core.shared.model.exception.MessagegwException
+import com.pinganfu.messagegw.core.shared.model.exception.code.ParserErrorCode
+import com.pinganfu.messagegw.service.facade.transaction.bean.f2p.F2PSingleQueryResp
+import com.pinganfu.messagegw.service.facade.transaction.bean.AbstractReq
+import com.pinganfu.messagegw.common.util.lang.MoneyUtil
+public class SPDBSH_F2P_RefundQuery extends TextMessageParser{
+  def parse(String exchangeId, String channelId,String t, AbstractReq req) {
+      def re = new F2PSingleQueryResp()
+      try {
+         Element root = XmlHelper.getField(t)
+       Element element = XmlHelper.descendant(root, "Plain")
+       if(element!=null){
+         Element eleMessage = XmlHelper.child(root, "Plain")
+         Element signature = XmlHelper.child(root, "Signature")
+         def  plain = eleMessage.getText()
+         def  sig = signature.getText()
+         def str = []
+         plain.split("\\|").each{lt -> def array = lt.split("=");str.add(array.length == 2?array[1]:"")}
+         def respCode = str[5]
+         def settDate = str[0]
+         Map map =new HashMap()
+         re.setInstAccountNo(req.getInstAccountNo())
+           re.setPayAmount(MoneyUtil.toCent(str[3]))
+           re.setOrderNo(str[2])
+           re.setOldOrderNo(str[1])
+           re.setBankResultCode(respCode)
+           if("00" == respCode){
+             re.setTransResult(TransactionResultEnum.SUCCESS.getCode())
+         }else{
+           re.setTransResult(TransactionResultEnum.FAIL.getCode())
+         }
+         re.setInstMerchantNo(req.getInstMerchantNo())
+           re.setBankOrderResult(respCode)
+           re.setOrderDate(DateUtil.parse(settDate,DateUtil.SHORT_FORMAT))
+           re.setPayCurrency("CNY")
+           re.setOrderResult(transOrderResult(respCode,channelId))
+           if(["94"].contains(respCode)){
+             re.setOrderResult(OrderStatus.S.getCode())
+               re.setBankOrderResult("00")
+           }
+         map.put("unSi",plain)
+           map.put("si",sig)
+           re.setExtensionMap(map)
+       }else{
+         Element errCode = XmlHelper.child(root, "ErrorCode")
+         Element errMsg = XmlHelper.child(root, "ErrorMsg")
+         def  errorCode = errCode.getText()
+         def  errorMsg = errMsg.getText()
+         re.setBankResultCode(errorCode)
+         re.setBankResultDesc(errorMsg)
+         re.setTransResult(TransactionResultEnum.FAIL.getCode())
+       }
+      } catch (Exception e) {
+        ExceptionUtil.caught(e, "报文响应XML解析出现异常")
+        throw new MessagegwException(ParserErrorCode.PARSE_ERROR, e)
+      }
+      return re
+    }
+  @Override
+  def SignatureInfo composeSignature(String channelId, Object message) {
+      F2PSingleQueryResp res = (F2PSingleQueryResp)message
+        String unSigned = ""
+        String signed = ""
+        Map<String,String>  map = res.getExtensionMap()
+        if(map){
+          signed = map.get("si")
+            unSigned = map.get("unSi")
+            return new SignatureInfo(channelId,signed,unSigned)
+        }
+        return null
+    }
+   def transOrderResult(String order,String id){
+    String mean = fmdServiceClient.queryRspCodeManing(order,id)
+    if("S".equals(mean)){
+      return OrderStatus.S.getCode()
+    }else if("F".equals(mean)){
+      return OrderStatus.F.getCode()
+    }else if("T".equals(mean)){
+      return OrderStatus.P.getCode()
+    }else {
+      return OrderStatus.U.getCode()
+    }
+  }
+}|&|备注|&|SPDBSH_F2P_RefundQuery|&|0|&||&&|
+SPDBSH0602|&|06|&|import org.dom4j.Element
+import java.util.Map
+import java.util.HashMap
+import com.pinganfu.messagegw.biz.message.model.parser.SignatureInfo
+import com.pinganfu.messagegw.biz.message.parser.TextMessageParser
+import com.pinganfu.messagegw.biz.message.util.XmlHelper
+import com.pinganfu.messagegw.common.util.lang.DateUtil
+import com.pinganfu.messagegw.common.util.log.ExceptionUtil
+import com.pinganfu.common.lang.enums.OrderStatus
+import com.pinganfu.messagegw.core.shared.enums.TransactionResultEnum
+import com.pinganfu.messagegw.core.shared.model.exception.MessagegwException
+import com.pinganfu.messagegw.core.shared.model.exception.code.ParserErrorCode
+import com.pinganfu.messagegw.service.facade.transaction.bean.f2p.F2PSingleQueryResp
+import com.pinganfu.messagegw.service.facade.transaction.bean.AbstractReq
+import com.pinganfu.messagegw.common.util.lang.MoneyUtil
+public class SPDBSH_F2P_RefundQuery extends TextMessageParser{
+  def parse(String exchangeId, String channelId,String t, AbstractReq req) {
+      def re = new F2PSingleQueryResp()
+      try {
+         Element root = XmlHelper.getField(t)
+       Element element = XmlHelper.descendant(root, "Plain")
+       if(element!=null){
+         Element eleMessage = XmlHelper.child(root, "Plain")
+         Element signature = XmlHelper.child(root, "Signature")
+         def  plain = eleMessage.getText()
+         def  sig = signature.getText()
+         def str = []
+         plain.split("\\|").each{lt -> def array = lt.split("=");str.add(array.length == 2?array[1]:"")}
+         def respCode = str[5]
+         def settDate = str[0]
+         Map map =new HashMap()
+         re.setInstAccountNo(req.getInstAccountNo())
+           re.setPayAmount(MoneyUtil.toCent(str[3]))
+           re.setOrderNo(str[2])
+           re.setOldOrderNo(str[1])
+           re.setBankResultCode(respCode)
+           if("00" == respCode){
+             re.setTransResult(TransactionResultEnum.SUCCESS.getCode())
+         }else{
+           re.setTransResult(TransactionResultEnum.FAIL.getCode())
+         }
+         re.setInstMerchantNo(req.getInstMerchantNo())
+           re.setBankOrderResult(respCode)
+           re.setOrderDate(DateUtil.parse(settDate,DateUtil.SHORT_FORMAT))
+           re.setPayCurrency("CNY")
+           re.setOrderResult(transOrderResult(respCode,channelId))
+           if(["94"].contains(respCode)){
+             re.setOrderResult(OrderStatus.S.getCode())
+               re.setBankOrderResult("00")
+           }
+         map.put("unSi",plain)
+           map.put("si",sig)
+           re.setExtensionMap(map)
+       }else{
+         Element errCode = XmlHelper.child(root, "ErrorCode")
+         Element errMsg = XmlHelper.child(root, "ErrorMsg")
+         def  errorCode = errCode.getText()
+         def  errorMsg = errMsg.getText()
+         re.setBankResultCode(errorCode)
+         re.setBankResultDesc(errorMsg)
+         re.setTransResult(TransactionResultEnum.FAIL.getCode())
+       }
+      } catch (Exception e) {
+        ExceptionUtil.caught(e, "报文响应XML解析出现异常")
+        throw new MessagegwException(ParserErrorCode.PARSE_ERROR, e)
+      }
+      return re
+    }
+  @Override
+  def SignatureInfo composeSignature(String channelId, Object message) {
+      F2PSingleQueryResp res = (F2PSingleQueryResp)message
+        String unSigned = ""
+        String signed = ""
+        Map<String,String>  map = res.getExtensionMap()
+        if(map){
+          signed = map.get("si")
+            unSigned = map.get("unSi")
+            return new SignatureInfo(channelId,signed,unSigned)
+        }
+        return null
+    }
+   def transOrderResult(String order,String id){
+    String mean = fmdServiceClient.queryRspCodeManing(order,id)
+    if("S".equals(mean)){
+      return OrderStatus.S.getCode()
+    }else if("F".equals(mean)){
+      return OrderStatus.F.getCode()
+    }else if("T".equals(mean)){
+      return OrderStatus.P.getCode()
+    }else {
+      return OrderStatus.U.getCode()
+    }
+  }
+}|&|备注|&|SPDBSH_F2P_RefundQuery|&|0|&||&&|

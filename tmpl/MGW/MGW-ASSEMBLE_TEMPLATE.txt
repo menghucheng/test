@@ -1,0 +1,1 @@
+交换类型[EXCHANGE_TYPE_ID]|&|渠道系统ID[CHANNEL_SYSTEM_ID]|&|模板样式 Text：文本 Binary：二进制流 Map：Map形式[TEMPLATE_TYPE]|&|最终模板内容[TEMPLATE_CONTENT]|&|子模板1[SUB_TEMPLATE_1]|&|动态URL模板[SUB_TEMPLATE_2]|&|报文头模板[HEADER_TEMPLATE]|&|消息类型[MESSAGE_TYPE]|&|创建时间[GMT_CREATE]|&|最后修改时间[GMT_MODIFIED]|&|当前交易顺序标识(默认'0')[CUR_TRANS_SEQ]|&|后续交易顺序标识(默认'')[NEXT_TRANS_SEQ]

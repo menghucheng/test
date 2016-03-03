@@ -1,0 +1,1 @@
+交易类型ID[TRANS_TYPE_ID]|&|交换类型ID[EXCHANGE_TYPE_ID]|&|渠道系统编号[CHANNEL_SYSTEM_ID]|&|[TRANS_TYPE_NAME]|&|路由方式[ROUTER_TYPE]|&|备注[MEMO]|&|创建时间[GMT_CREATE]|&|最后修改时间[GMT_MODIFIED]|&|渠道系统分组[CHANNEL_SYSTEM_GROUP]|&|是否需要签到(默认"N")[LOGON_FLAG]|&|B2C前台通知结果是否需要验签, Y or N(默认"Y")[VERIFY_FLAG]

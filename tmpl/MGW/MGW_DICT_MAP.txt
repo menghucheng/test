@@ -1,0 +1,2 @@
+字典类别[DICT_TYPE]|&|银行id[BANK_ID]|&|渠道ID列表[CHANNEL_IDS]|&|字典条目值(s)[ITEM_KEYS]|&|字典条目值[ITEM_VAL]|&|字典条目说明[MEMO]|&|
+bankcode|&|ICBCSZ|&|ICBCSZ0802|&|ABC|&|103100000026;中国农业银行股份有限公司|&|字典条目说明

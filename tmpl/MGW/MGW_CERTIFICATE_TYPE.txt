@@ -1,0 +1,1 @@
+[SEQUENCE$$]|&|[SNAPTIME$$]|&|[DMLTYPE$$]|&|[OLD_NEW$$]|&|[CHANGE_VECTOR$$]|&|[XID$$]
