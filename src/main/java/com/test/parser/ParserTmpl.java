@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.*;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -24,15 +25,17 @@ public class ParserTmpl {
     public static String rarFiles = "D:\\Users\\menghucheng012\\Desktop\\mine\\MyFiles\\workplan\\tmpl.rar";
 
 
-    public String readFile(File file) throws Exception {
+
+    public HashMap<String, String>  readFile(File file, HashMap<String, String> dataMap) throws Exception {
         FileInputStream fis = new FileInputStream(file);
         InputStreamReader isReader = new InputStreamReader(fis,"GBK");
         System.out.println("当前文件："+file.getName());
         BufferedReader bfReader = new BufferedReader(isReader);
         //StringBuffer线程安全的  StringBuilder线程非安全的
         StringBuilder sb = new StringBuilder();
+        String fileName = file.getName().substring(0,file.getName().indexOf("."));
 
-        String line = "";
+        String line;
 
         String titles = bfReader.readLine();
         String[] title = titles.split("\\|&\\|");
@@ -48,40 +51,63 @@ public class ParserTmpl {
 
         String[] contentLines = sb.toString().split("\\|&&\\|");
 
-        for (String contenLine : contentLines) {
-            String[] contents = contenLine.split("\\|&\\|");
-            for (String content : contents) {
-                if (content.length() > 20){
-                    content = content.substring(0,20);
+        //RNumber的位置拿来放记录数
+        dataMap.put(fileName+"RNumber",contentLines.length+"");
+        for (int i = 0; i < contentLines.length; i++) {
+            String[] contents = contentLines[i].split("\\|&\\|");
+
+            if (contents.length == 1 && "".equals(contents[0].trim())){
+                System.out.println("该表 "+fileName+"无记录");
+                dataMap.put(fileName+"RNumber","0");
+            }else{
+                for (int j = 0; j < contents.length; j++) {
+                    dataMap.put(fileName+i+j+"",contents[j]);
+                    System.out.print("key::"+fileName+1+j+"        "+"value::"+contents[j]);
+                    System.out.println();
                 }
-                System.out.print(content+"        ");
             }
+
             System.out.println();
         }
+
+//        for (String contenLine : contentLines) {
+//            String[] contents = contenLine.split("\\|&\\|");
+//            for (String content : contents) {
+//                if (content.length() > 20){
+//                    content = content.substring(0,20);
+//                }
+//                System.out.print(content+"        ");
+//            }
+//            System.out.println();
+//        }
         System.out.println();
 
-        return sb.toString();
+        return dataMap;
     }
 
     //从压缩后的文件夹中读取每个文件的内容
-    public void readFiles(File files) throws Exception {
+    public HashMap<String, String>  readFiles(File files, HashMap<String, String> dataMap) throws Exception {
+        if (files == null){
+            System.out.println("Files文件为空");
+            return null;
+        }
         if(!files.isDirectory()){
-            readFile(files);
+            dataMap.putAll(readFile(files,dataMap));
         }else {
             File[] childFiles = files.listFiles();
             for (File file: childFiles) {
-                readFiles(file);
+                readFiles(file,dataMap);
             }
         }
+        return dataMap;
     }
 
     public void unRar(String compressFilePath, String descDir) throws IOException, RarException {
-        Archive a = null;
+        Archive a ;
         FileOutputStream fos = null;
 
         a = new Archive(new File(compressFilePath));
         FileHeader fh = a.nextFileHeader();
-        File destFileName = null;
         while (fh != null) {
             String fileName = fh.getFileNameString().trim();
             File destFile = new File(descDir + fileName);
@@ -128,7 +154,7 @@ public class ParserTmpl {
 
             File destFile = new File(descDir + zipEnrtyName);
 
-            if(entry.isDirectory() && !destFile.exists()){
+            if(entry.isDirectory()){
                 destFile.mkdirs();
             }
             else{
@@ -175,7 +201,14 @@ public class ParserTmpl {
 //        ReadFile();
         String descDir = "D:\\Users\\menghucheng012\\Desktop\\mine\\tmp\\";
         File files = new File(DeCompressUtil.extract(zipFiles,descDir));
-        readFiles(files);
+        HashMap<String, String> dataMap = new HashMap<String, String>();
+        dataMap = readFiles(files, dataMap);
+
+        //遍历Map
+        for (String key :
+             dataMap.keySet()) {
+            System.out.println(key+"====="+dataMap.get(key));
+        }
     }
 
 }

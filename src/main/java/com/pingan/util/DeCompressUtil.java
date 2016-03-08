@@ -55,7 +55,7 @@ public class DeCompressUtil {
 
             File destFile = new File(descDir + zipEnrtyName);
 
-            if(entry.isDirectory() && !destFile.exists()){
+            if(entry.isDirectory()){
                 destFile.mkdirs();
             }else{
                 InputStream in = zf.getInputStream(entry);
