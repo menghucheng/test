@@ -1,4 +1,4 @@
-package com.test.设计模式.委派模式delegate;
+package com.test.设计模式.委派模式Delegate;
 
 import org.junit.Test;
 

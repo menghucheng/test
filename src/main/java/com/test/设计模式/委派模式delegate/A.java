@@ -1,4 +1,4 @@
-package com.test.设计模式.委派模式delegate;
+package com.test.设计模式.委派模式Delegate;
 
 /**
  * Created by MENGHUCHENG012 on 2016/3/8.
