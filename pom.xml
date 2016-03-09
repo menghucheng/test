@@ -5,20 +5,30 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>mhc</groupId>
-    <artifactId>com.mhc.test</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
     <dependencies>
+        <!--处理excel-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>3.13</version>
         </dependency>
+
+        <!--日志-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+        <!--单元测试-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
+
+        <!--解压-->
+
         <dependency>
             <groupId>ant</groupId>
             <artifactId>ant</artifactId>
@@ -30,5 +40,8 @@
             <version>0.7</version>
         </dependency>
     </dependencies>
+    <artifactId>com.mhc.test</artifactId>
+
+    <version>1.0-SNAPSHOT</version>
 
 </project>

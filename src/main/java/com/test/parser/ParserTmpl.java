@@ -24,9 +24,12 @@ public class ParserTmpl {
     public void test() throws Exception{
 //        ReadFile();
         String descDir = "D:\\Users\\menghucheng012\\Desktop\\mine\\tmp\\";
-        File files = new File(DeCompressUtil.extract(zipFiles,descDir));
+        File files = new File(DeCompressUtil.extract(rarFiles,descDir));
         HashMap<String, String> dataMap = new HashMap<String, String>();
-        dataMap = TmplParseUtils.readFiles(files, dataMap);
+        dataMap = TmplParseUtils.handler(files, dataMap);
+
+
+
 
         //遍历Map
         for (String key :
