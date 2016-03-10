@@ -92,7 +92,7 @@ public class TmplParseUtils {
     public static HashMap<String, String> handler(File files, HashMap<String, String> dataMap) throws Exception{
         dataMap = readFiles(files, dataMap);
         //先判断配置文件的数量对不对
-        int count = Templelate.values().length;
+        int count = TemplelateEnum.values().length;
         if(count != filesCount){
             throw new Exception("配置文件的个数不正确!应有："+count+" 实际："+filesCount);
         }
