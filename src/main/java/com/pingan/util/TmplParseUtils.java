@@ -1,5 +1,6 @@
 package com.pingan.util;
 
+import com.test.FileOperation.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
@@ -60,12 +61,9 @@ public class TmplParseUtils {
             }
         }
 
-        //读完数据后删除解压后的临时文件
-        if (file.getAbsoluteFile().delete()){
-            logger.debug("删除临时文件："+fileName);
-        }else {
-            logger.debug("删除失败  =====  临时文件："+fileName+"失败");
-        }
+        if (fis != null) fis.close();
+
+        if (isReader != null) isReader.close();
 
         return dataMap;
     }
@@ -73,7 +71,7 @@ public class TmplParseUtils {
     //从压缩后的文件夹中读取每个文件的内容
     private static HashMap<String, String> readFiles(File files, HashMap<String, String> dataMap) throws Exception {
         if (files == null){
-            System.out.println("Files文件为空");
+            System.out.println("files文件为空");
             return null;
         }
         if(!files.isDirectory()){
@@ -98,6 +96,9 @@ public class TmplParseUtils {
         if(count != filesCount){
             throw new Exception("配置文件的个数不正确!应有："+count+" 实际："+filesCount);
         }
+
+        //解析完数据后删除临时文件
+        FileUtils.delFiles(files);
         return dataMap;
     }
 
