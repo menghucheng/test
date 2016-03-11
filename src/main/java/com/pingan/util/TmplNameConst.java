@@ -5,6 +5,8 @@ package com.pingan.util;
  */
 public class TmplNameConst {
 
+    public static final int count = 6;
+
     /**
      * 报文网关
      */
