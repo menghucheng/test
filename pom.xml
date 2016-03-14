@@ -47,6 +47,14 @@
             <version>2.4</version>
         </dependency>
 
+        <!--spring-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>4.2.3.RELEASE</version>
+        </dependency>
+
+
     </dependencies>
     <artifactId>com.mhc.test</artifactId>
 
