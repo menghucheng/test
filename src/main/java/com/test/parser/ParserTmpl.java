@@ -16,15 +16,15 @@ public class ParserTmpl {
 
     public static File file = new File("D:\\Users\\menghucheng012\\Desktop\\mine\\MyFiles\\workplan\\tmpl\\报文网关-MGW\\报文网关-解析银行响应报文配置模板(MGW-PARSER_TEMPLATE).txt");
 //    public static File zipFile = new File("D:\\Users\\menghucheng012\\Desktop\\mine\\MyFiles\\workplan\\questions.zip");
-    public static String zipFiles = "D:\\Users\\menghucheng012\\Desktop\\mine\\MyFiles\\workplan\\tmpl.zip";
-    public static String rarFiles = "D:\\Users\\menghucheng012\\Desktop\\mine\\MyFiles\\workplan\\tmpl.rar";
+//    public static String zipFiles = "D:\\Users\\menghucheng012\\Desktop\\mine\\MyFiles\\workplan\\tmpl.zip";
+    public static String zipFiles = "E:\\GIT\\file\\code\\tmpl.zip";
 
 
     @Test
     public void test() throws Exception{
 //        ReadFile();
-        String descDir = "D:\\Users\\menghucheng012\\Desktop\\mine\\tmp\\";
-        File files = new File(DeCompressUtil.extract(rarFiles,descDir));
+        String descDir = "E:\\GIT\\file\\code\\temp\\";
+        File files = new File(DeCompressUtil.extract(zipFiles,descDir));
         HashMap<String, String> dataMap = new HashMap<String, String>();
         dataMap = TmplParseUtils.handler(files, dataMap);
 

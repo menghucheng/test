@@ -31,12 +31,12 @@ public class TmplParseUtils {
 
         String line;
 
-        String titles = bfReader.readLine();
-        String[] title = titles.split("\\|&\\|");
-
-        for (String t : title) {
-            System.out.print(t+"   ");
-        }
+////        String titles = bfReader.readLine();
+////        String[] title = titles.split("\\|&\\|");
+//
+//        for (String t : title) {
+//            System.out.print(t+"   ");
+//        }
         System.out.println();
 
         while (null != (line = bfReader.readLine())){
@@ -47,7 +47,7 @@ public class TmplParseUtils {
 
         //RNumber的位置拿来放记录数
         dataMap.put(fileName+"RNumber",contentLines.length+"");
-        for (int i = 0; i < contentLines.length; i++) {
+        for (int i = 1; i < contentLines.length - 1; i++) {
             String[] contents = contentLines[i].split("\\|&\\|");
 
             if (contents.length == 1 && "".equals(contents[0].trim())){

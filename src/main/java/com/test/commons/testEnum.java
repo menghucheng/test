@@ -1,6 +1,6 @@
 package com.test.commons;
 
-import com.pingan.util.TmplNameConst;
+import com.pingan.util.TemplelateEnum;
 
 /**
  * Created by MENGHUCHENG012 on 2016/3/10.
@@ -8,6 +8,12 @@ import com.pingan.util.TmplNameConst;
 public class testEnum {
 
     public static void main(String[] args) {
-        System.out.println(TmplNameConst.MGW_ASSEMBLE_TEMPLATE);
+//       if ()
+
+        System.out.println(null!=TemplelateEnum.valueOf("MGW_ASSEMBLE_TEMPLATE"));
+
+//        for (TemplelateEnum templelateEnum:
+//                TemplelateEnum.values()) {
+//        }
     }
 }

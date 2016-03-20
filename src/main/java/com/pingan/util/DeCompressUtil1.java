@@ -1,6 +1,8 @@
 package com.pingan.util;
 
-import org.apache.log4j.Logger;
+import com.github.junrar.Archive;
+import com.github.junrar.exception.RarException;
+import com.github.junrar.rarfile.FileHeader;
 
 import java.io.*;
 import java.util.Enumeration;
@@ -10,31 +12,27 @@ import java.util.zip.ZipFile;
 /**
  * Created by MENGHUCHENG012 on 2016/3/2.
  */
-public class DeCompressUtil {
-
-    private static final Logger logger = Logger.getLogger(DeCompressUtil.class);
+public class DeCompressUtil1 {
 
     /**
-     * 只处理zip格式的压缩包
      * @param compressFilePath 需解压的文件路径
      * @param descDir 解压到的文件夹路径
      * @return 返回解压后的文件路径
      */
     public static String extract(String compressFilePath, String descDir) {
-
         try {
-
-           File pathFile = new File(descDir);
+            File pathFile = new File(descDir);
 
             if(!pathFile.exists()){
                 pathFile.mkdirs();
             }
 
-            if (compressFilePath.toLowerCase().endsWith(".zip")){
-                logger.debug("zip文件");
+            if (compressFilePath.toLowerCase().endsWith(".rar")){
+                System.out.println("rar文件");
+                unRar(compressFilePath,descDir);
+            }else{
+                System.out.println("zip文件");
                 unZip(compressFilePath,descDir);
-            } else{
-                throw new IllegalArgumentException("只能解压zip格式压缩包");
             }
             System.out.println("解压缩完成！");
         } catch (Exception e) {
@@ -77,4 +75,39 @@ public class DeCompressUtil {
         }
     }
 
+    /**
+     * @param compressFilePath 需解压的文件路径
+     * @param descDir 解压到的文件夹路径
+     * @throws Exception
+     */
+    private static void unRar(String compressFilePath, String descDir) throws IOException, RarException {
+        Archive a = null;
+        FileOutputStream fos = null;
+
+        a = new Archive(new File(compressFilePath));
+        FileHeader fh = a.nextFileHeader();
+        while (fh != null) {
+            String fileName = fh.getFileNameString().trim();
+            File destFile = new File(descDir + fileName);
+
+            if (!fh.isDirectory()) {
+                File parentDir = destFile.getParentFile();
+
+                if (!parentDir.exists()){
+                    parentDir.mkdirs();
+                }
+                fos = new FileOutputStream(destFile);
+                a.extractFile(fh, fos);
+                fos.close();
+            }
+            fh = a.nextFileHeader();
+        }
+
+        if(a != null){
+            a.close();
+        }
+        if(fos != null){
+            fos.close();
+        }
+    }
 }

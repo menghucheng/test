@@ -31,7 +31,7 @@ public class FileUtils {
         for (File file: files
              ) {
             if (file.isDirectory()){
-                logger.debug("删除文件:"+file.getName()+"  结果："+delFiles(file));
+                logger.debug("删除临时文件:"+file.getName()+"  结果："+delFiles(file));
             }else{
                 /**
                  * 如果删除文件失败，分几种情况：文件流未关闭，或被占用(手动删除)，还有文件夹下面还有文件，
